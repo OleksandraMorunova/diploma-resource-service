@@ -2,7 +2,6 @@ package com.resource.service.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -22,7 +21,7 @@ public class Task {
 
     @Field("user_id")
     @Schema(description = "Номер користувача, що додав завдання")
-    private ObjectId userId;
+    private String userId;
 
     @Field("title")
     @Schema(description = "Опис заголовку завдання")
@@ -34,7 +33,7 @@ public class Task {
 
     @Field("files")
     @Schema(description = "Файли до завдання")
-    private List<ObjectId> documents;
+    private List<String> files;
 
     @Field("added_data")
     @Schema(description = "Дата і час додавання данних")
@@ -46,5 +45,9 @@ public class Task {
 
     @Field("comments")
     @Schema(description = "Коментарі до завдання користувача")
-    List<Comments> comments;
+    private List<Comments> comments;
+
+    @Field("audit")
+    @Schema(description = "Перевірка завдання")
+    private String audit;
 }
