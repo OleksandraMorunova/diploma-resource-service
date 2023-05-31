@@ -89,14 +89,27 @@ public class TaskService extends TaskAbstractService<Task, String> {
         if(findTask.isPresent()){
             if(findTask.get().getComments() != null){
                 List<Comments> existList = findTask.get().getComments();
-                existList.add(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(),  LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), false));
+                existList.add(new Comments(String.valueOf(ObjectId.get()),
+                        comments.getUser_comment_id(),
+                        comments.getComment(),
+                        LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                        false)
+                );
                 Task existTask = findTask.get();
                 existTask.setComments(existList);
+                System.out.println(existList.get(0).getComment_added_data());
                 return repository.save(existTask);
             } else {
-                List<Comments> newList = List.of(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(),  LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), false));
+                List<Comments> newList = List.of(new Comments(
+                        String.valueOf(ObjectId.get()),
+                        comments.getUser_comment_id(),
+                        comments.getComment(),
+                        LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                        false)
+                );
                 Task existTask = findTask.get();
                 existTask.setComments(newList);
+                System.out.println(newList.get(0).getComment_added_data());
                 return repository.save(existTask);
             }
         } else throw new EntityNotFoundException(String.class, "Значення не існує зі вказаними параметрами: ");
@@ -159,7 +172,7 @@ public class TaskService extends TaskAbstractService<Task, String> {
             if(findTask.get().getFiles() != null) {
                 List<String> newListOfDocuments = findTask.get().getFiles();
                 for (String it: newListOfDocuments){
-                    if (it.equals(idFiles.toString())){
+                    if (it.equals(idFiles)){
                         this.gridFsTemplate.delete(new Query(Criteria.where("_id").is(idFiles)));
                         Task newTask = findTask.get();
                         newTask.setFiles(newTask.getFiles().size() > 0 ? newListOfDocuments : null);

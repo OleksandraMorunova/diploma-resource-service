@@ -25,7 +25,7 @@ public class Comments {
 
     @Field("comment_added_data")
     @Schema(description = "Дата додавання коментаря")
-    private String comment_added_data = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    private String comment_added_data;
 
     @Field("reviewed")
     private Boolean reviewed;
