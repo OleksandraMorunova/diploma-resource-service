@@ -89,12 +89,12 @@ public class TaskService extends TaskAbstractService<Task, String> {
         if(findTask.isPresent()){
             if(findTask.get().getComments() != null){
                 List<Comments> existList = findTask.get().getComments();
-                existList.add(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(), comments.getComment_added_data(), false));
+                existList.add(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(),  LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), false));
                 Task existTask = findTask.get();
                 existTask.setComments(existList);
                 return repository.save(existTask);
             } else {
-                List<Comments> newList = List.of(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(), comments.getComment_added_data(), false));
+                List<Comments> newList = List.of(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(),  LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), false));
                 Task existTask = findTask.get();
                 existTask.setComments(newList);
                 return repository.save(existTask);
