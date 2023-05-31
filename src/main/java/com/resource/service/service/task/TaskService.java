@@ -83,29 +83,18 @@ public class TaskService extends TaskAbstractService<Task, String> {
     }
 
     @Override
+    @Transactional
     public Task addCommentById(String idTask, Comments comments) {
         Optional<Task> findTask = Optional.ofNullable(taskRepository.findTaskById(idTask));
-        LocalDateTime now = LocalDateTime.now();
         if(findTask.isPresent()){
             if(findTask.get().getComments() != null){
                 List<Comments> existList = findTask.get().getComments();
-                existList.add(new Comments(String.valueOf(ObjectId.get()),
-                        comments.getUser_comment_id(),
-                        comments.getComment(),
-                        now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                        false)
-                );
+                existList.add(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(), comments.getComment_added_data(), false));
                 Task existTask = findTask.get();
                 existTask.setComments(existList);
                 return repository.save(existTask);
             } else {
-                List<Comments> newList = List.of(new Comments(
-                        String.valueOf(ObjectId.get()),
-                        comments.getUser_comment_id(),
-                        comments.getComment(),
-                        now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                        false)
-                );
+                List<Comments> newList = List.of(new Comments(String.valueOf(ObjectId.get()), comments.getUser_comment_id(), comments.getComment(), comments.getComment_added_data(), false));
                 Task existTask = findTask.get();
                 existTask.setComments(newList);
                 return repository.save(existTask);
@@ -170,7 +159,7 @@ public class TaskService extends TaskAbstractService<Task, String> {
             if(findTask.get().getFiles() != null) {
                 List<String> newListOfDocuments = findTask.get().getFiles();
                 for (String it: newListOfDocuments){
-                    if (it.equals(idFiles)){
+                    if (it.equals(idFiles.toString())){
                         this.gridFsTemplate.delete(new Query(Criteria.where("_id").is(idFiles)));
                         Task newTask = findTask.get();
                         newTask.setFiles(newTask.getFiles().size() > 0 ? newListOfDocuments : null);
